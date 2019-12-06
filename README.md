@@ -1,3 +1,7 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/ystyle/sqlmanager)](https://goreportcard.com/report/github.com/ystyle/sqlmanager)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ystyle/sqlmanager/blob/master/LICENSE)
+[![GoDoc](https://godoc.org/github.com/ystyle/sqlmanager?status.svg)](https://godoc.org/github.com/ystyle/sqlmanager)
+---
 ### sqlmanager
 a library for manager sql with markdown like [beetsql](https://gitee.com/xiandafu/beetlsql)
 
