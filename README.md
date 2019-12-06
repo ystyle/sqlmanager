@@ -30,8 +30,8 @@ import (
 
 func main() {
     sm := sqlmanager.New()
-    sm.Use(NewMarkdownDriver())
-    // sm.Use(NewMarkdownDriverWithDir("./prod-sql"))
+    sm.Use(sqlmanager.NewMarkdownDriver())
+    // sm.Use(sqlmanager.NewMarkdownDriverWithDir("./prod-sql"))
     sm.Load()
     sql, err := sm.RenderTPL("GetStudentByID2", 1)
     if err != nil {
