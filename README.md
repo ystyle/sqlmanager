@@ -1,5 +1,7 @@
 ### sqlmanager
->a library for manager sql with markdown like beetsql
+a library for manager sql with markdown like [beetsql](https://gitee.com/xiandafu/beetlsql)
+
+**Not A Go ORM Library**
  
 ### feature
 - manage sql with markdown
@@ -19,16 +21,24 @@ create a markdown in `sql/test.md`
 
 in golang 
 ```go
-sm := New()
-sm.Use(NewMarkdownDriver())
-// sm.Use(NewMarkdownDriverWithDir("./prod-sql"))
-sm.Load()
-sql, err := sm.RenderTPL("GetStudentByID", 1)
-if err != nil {
-    panic(err)
+package main
+
+import (
+    "fmt"
+    "github.com/ystyle/sqlmanager"
+)
+
+func main() {
+	sm := sqlmanager.New()
+	sm.Use(sqlmanager.NewMarkdownDriverWithDir("./test-sql"))
+	sm.Load()
+	sql, err := sm.RenderTPL("GetStudentByID2", 1)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(sql)
+    // select * from student where id = 1
 }
-fmt.Println(sql)
-// select * from student where id = 1
 ```
 
 ### custom puglin
