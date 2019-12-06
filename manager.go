@@ -7,23 +7,23 @@ import (
 	"strings"
 )
 
-type sqlManager struct {
+type SqlManager struct {
 	sqlTemples []SqlTemple
 	drivers    map[string]Driver
 }
 
-func New() *sqlManager {
-	sm := &sqlManager{
+func New() *SqlManager {
+	sm := &SqlManager{
 		drivers: make(map[string]Driver),
 	}
 	return sm
 }
 
-func (sm *sqlManager) Use(plugin Driver) {
+func (sm *SqlManager) Use(plugin Driver) {
 	sm.drivers[plugin.DriverName()] = plugin
 }
 
-func (sm *sqlManager) Load() {
+func (sm *SqlManager) Load() {
 	for _, driver := range sm.drivers {
 		sqls, err := driver.Load()
 		if err != nil {
@@ -44,7 +44,7 @@ func (sm *sqlManager) Load() {
 	}
 }
 
-func (sm *sqlManager) findTpl(name string) (*SqlTemple, error) {
+func (sm *SqlManager) findTpl(name string) (*SqlTemple, error) {
 	for _, tpl := range sm.sqlTemples {
 		if tpl.Name == name {
 			return &tpl, nil
