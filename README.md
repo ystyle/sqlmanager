@@ -53,14 +53,14 @@ type CustomeDriver struct {
 }
 
 func NewCustomeDriver() *CustomeDriver {
-	return &CustomeDriver{}
+    return &CustomeDriver{}
 }
 
-func (mdd *MarkdownDriver) DriverName() string {
-	return "CustomeDriver"
+func (mdd *CustomeDriver ) DriverName() string {
+    return "CustomeDriver"
 }
 
-func (mdd *MarkdownDriver) Load() ([]SqlTemple, error) {
+func (mdd *CustomeDriver ) Load() ([]SqlTemple, error) {
     var list []SqlTemple
     // db.table("sql_store").Find(&list)
     return list, nil
