@@ -20,6 +20,9 @@ func New() *SqlManager {
 }
 
 func (sm *SqlManager) Use(plugin Driver) {
+	if _, ok := sm.drivers[plugin.DriverName()]; ok {
+		log.Printf("sqlmanager - WARN: %s already used", plugin.DriverName())
+	}
 	sm.drivers[plugin.DriverName()] = plugin
 }
 
