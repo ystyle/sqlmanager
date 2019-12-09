@@ -1,4 +1,4 @@
-module sqlmanager
+module github.com/ystyle/sqlmanager
 
 go 1.13
 
