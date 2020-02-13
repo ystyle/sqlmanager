@@ -20,7 +20,7 @@ create a markdown in `sql/test.md`
     >get student by id, required id
     ```sql
     select * from student where id = {{.}}
-```
+    ```
 ```
 
 in golang 
