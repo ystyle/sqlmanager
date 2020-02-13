@@ -2,25 +2,20 @@ package sqlmanager
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"log"
-	"text/template"
 )
 
 func (sm *SqlManager) RenderTPL(name string, data interface{}) (string, error) {
-	tpl, err := sm.findTpl(name)
-	if err != nil {
-		return "", fmt.Errorf("sqlmanager - ERROR: %s %w", name, err)
-	}
-	t := template.New(name)
-	_, err = t.Parse(tpl.Sql)
-	if err != nil {
-		return "", fmt.Errorf("sqlmanager - ERROR: %s[%s] %w", name, tpl.Description, err)
-	}
 	var buff bytes.Buffer
-	err = t.Execute(&buff, data)
+	err := sm.tpl.ExecuteTemplate(&buff, name, data)
 	if err != nil {
-		return "", fmt.Errorf("sqlmanager - ERROR: %s[%s] %w", name, tpl.Description, err)
+		sql, has := sm.findTpl(name)
+		if has {
+			return "", fmt.Errorf("sqlmanager - ERROR: %s[%s] %w", name, sql.Description, err)
+		}
+		return "", fmt.Errorf("sqlmanager - ERROR: %s %w", name, errors.New(fmt.Sprintf("template: %s no found", name)))
 	}
 	return buff.String(), nil
 }

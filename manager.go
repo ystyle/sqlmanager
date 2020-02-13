@@ -1,20 +1,24 @@
 package sqlmanager
 
 import (
-	"errors"
-	"fmt"
 	"log"
+	"reflect"
+	"runtime"
 	"strings"
+	"text/template"
 )
 
 type SqlManager struct {
 	sqlTemples []SqlTemple
 	drivers    map[string]Driver
+	funcs      template.FuncMap
+	tpl        *template.Template
 }
 
 func New() *SqlManager {
 	sm := &SqlManager{
 		drivers: make(map[string]Driver),
+		funcs:   template.FuncMap{},
 	}
 	return sm
 }
@@ -27,6 +31,7 @@ func (sm *SqlManager) Use(plugin Driver) {
 }
 
 func (sm *SqlManager) Load() {
+	sm.tpl = nil
 	for _, driver := range sm.drivers {
 		sqls, err := driver.Load()
 		if err != nil {
@@ -34,26 +39,46 @@ func (sm *SqlManager) Load() {
 			log.Panicln(err)
 		}
 		for _, sql := range sqls {
-			d, err := sm.findTpl(sql.Name)
-			if err != nil {
-				sm.sqlTemples = append(sm.sqlTemples, sql)
+			d, has := sm.findTpl(sql.Name)
+			if has {
+				log.Printf("sqlmanager - WARN: %s Has duplicate sql: It will be cover [%s] with [ %s ]", sql.Name, strings.ReplaceAll(d.Sql, "\n", ""), strings.ReplaceAll(sql.Sql, "\n", ""))
+			}
+			sm.sqlTemples = append(sm.sqlTemples, sql)
+			if sm.tpl == nil {
+				sm.tpl = template.New(sql.Name)
+				sm.tpl.Funcs(sm.funcs)
 			} else {
-				log.Printf("sqlmanager - WARN: %s Has duplicate sql: %s [ %s ]", sql.Name, d.Name, strings.ReplaceAll(d.Sql, "\n", ""))
-				log.Printf("sqlmanager - WARN: It will be covered")
+				sm.tpl = sm.tpl.New(sql.Name)
+			}
+			sm.tpl, err = sm.tpl.Parse(sql.Sql)
+			if err != nil {
+				panic(err)
 			}
 		}
-
 		log.Printf("sqlmanager - INFO: %s loaded %d sqls.\n", driver.DriverName(), len(sqls))
 	}
 }
 
-func (sm *SqlManager) findTpl(name string) (*SqlTemple, error) {
+func (sm *SqlManager) findTpl(name string) (*SqlTemple, bool) {
 	for _, tpl := range sm.sqlTemples {
 		if tpl.Name == name {
-			return &tpl, nil
+			return &tpl, true
 		}
 	}
-	return nil, errors.New(fmt.Sprintf("sqlmanager - template: %s no found", name))
+	return nil, false
+}
+
+func (sm *SqlManager) RegisterFunc(funcs template.FuncMap) {
+	for k, v := range funcs {
+		if temp, ok := sm.funcs[k]; ok {
+			log.Printf("sqlmanager - WARN: %s Has duplicate func: It will be cover [%s] with [%s]", k, getFunctionName(temp), getFunctionName(v))
+		}
+		sm.funcs[k] = v
+	}
+}
+
+func getFunctionName(i interface{}) string {
+	return runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
 }
 
 type Driver interface {

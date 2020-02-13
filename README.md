@@ -16,11 +16,11 @@ a library for manager sql with markdown like [beetsql](https://gitee.com/xiandaf
 
 create a markdown in `sql/test.md`
 ```markdown
-    ### GetStudentByID
-    >get student by id, required id
-    ```sql
-    select * from student where id = {{.}}
-    ```
+### GetStudentByID
+>get student by id, required id
+```sql
+select * from student where id = {{.}}
+```
 ```
 
 in golang 
@@ -35,7 +35,14 @@ import (
 func main() {
     sm := sqlmanager.New()
     sm.Use(sqlmanager.NewMarkdownDriver())
+    // load sql with custom dir
     // sm.Use(sqlmanager.NewMarkdownDriverWithDir("./prod-sql"))
+    // register go template func
+    // sm.RegisterFunc(template.FuncMap{
+    //     "test": func(v string) string {
+    //         return strings.ToUpper(v)
+    //     },
+    // })
     sm.Load()
     sql, err := sm.RenderTPL("GetStudentByID2", 1)
     if err != nil {
