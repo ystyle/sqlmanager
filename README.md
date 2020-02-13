@@ -3,7 +3,7 @@
 [![GoDoc](https://godoc.org/github.com/ystyle/sqlmanager?status.svg)](https://godoc.org/github.com/ystyle/sqlmanager)
 ---
 ### sqlmanager
-a library for manager sql with markdown like [beetsql](https://gitee.com/xiandafu/beetlsql)
+a library for manager sql with markdown like [beetsql](http://ibeetl.com/)
 
 **Not A Go ORM Library**
  
@@ -16,10 +16,10 @@ a library for manager sql with markdown like [beetsql](https://gitee.com/xiandaf
 
 create a markdown in `sql/test.md`
 ```markdown
-### GetStudentByID
->get student by id, required id
-```sql
-select * from student where id = {{.}}
+    ### GetStudentByID
+    >get student by id, required id
+    ```sql
+    select * from student where id = {{.}}
 ```
 ```
 
