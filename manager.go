@@ -25,7 +25,7 @@ func New() *SqlManager {
 
 func (sm *SqlManager) Use(plugin Driver) {
 	if _, ok := sm.drivers[plugin.DriverName()]; ok {
-		log.Printf("sqlmanager - WARN: %s already used", plugin.DriverName())
+		log.Printf("sqlmanager - WARN: %s already used\n", plugin.DriverName())
 	}
 	sm.drivers[plugin.DriverName()] = plugin
 }
@@ -41,7 +41,7 @@ func (sm *SqlManager) Load() {
 		for _, sql := range sqls {
 			d, has := sm.findTpl(sql.Name)
 			if has {
-				log.Printf("sqlmanager - WARN: %s Has duplicate sql: It will be cover [%s] with [ %s ]", sql.Name, strings.ReplaceAll(d.Sql, "\n", ""), strings.ReplaceAll(sql.Sql, "\n", ""))
+				log.Printf("sqlmanager - WARN: %s Has duplicate sql: It will be cover [%s] with [ %s ]\n", sql.Name, strings.ReplaceAll(d.Sql, "\n", ""), strings.ReplaceAll(sql.Sql, "\n", ""))
 			}
 			sm.sqlTemples = append(sm.sqlTemples, sql)
 			if sm.tpl == nil {
@@ -71,7 +71,7 @@ func (sm *SqlManager) findTpl(name string) (*SqlTemple, bool) {
 func (sm *SqlManager) RegisterFunc(funcs template.FuncMap) {
 	for k, v := range funcs {
 		if temp, ok := sm.funcs[k]; ok {
-			log.Printf("sqlmanager - WARN: %s Has duplicate func: It will be cover [%s] with [%s]", k, getFunctionName(temp), getFunctionName(v))
+			log.Printf("sqlmanager - WARN: %s Has duplicate func: It will be cover [%s] with [%s]\n", k, getFunctionName(temp), getFunctionName(v))
 		}
 		sm.funcs[k] = v
 	}
