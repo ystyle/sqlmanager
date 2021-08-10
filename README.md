@@ -3,7 +3,7 @@
 [![GoDoc](https://godoc.org/github.com/ystyle/sqlmanager?status.svg)](https://godoc.org/github.com/ystyle/sqlmanager)
 ---
 ### sqlmanager
-a library for manager sql with markdown like [beetsql](http://ibeetl.com/)
+a library for manager sql with markdown or constant field. and you can custom sql store plugin.
 
 **Not A Go ORM Library**
  
@@ -50,6 +50,20 @@ func main() {
     }
     fmt.Println(sql)
     // select * from student where id = 1
+    
+    // using gorm 
+    // db, err := gorm.Open("databaseurl")
+    // if err != nil {
+    //   panic("failed to connect database")
+    // }
+    // db.Raw(sql)
+    
+    // using database/sql
+    // db, err := sql.Open("driver-name", "database=test1")
+    // if err != nil {
+    //   log.Fatal(err)
+    // }
+    // db.Query(sql)
 }
 ```
 
