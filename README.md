@@ -3,7 +3,7 @@
 [![GoDoc](https://godoc.org/github.com/ystyle/sqlmanager?status.svg)](https://godoc.org/github.com/ystyle/sqlmanager)
 ---
 ### sqlmanager
-a library for manager sql with markdown or constant field. and you can custom sql store plugin.
+a library for manager sql with markdown or constant. and you can custom sql store plugin.
 
 **Not A Go ORM Library**
  
