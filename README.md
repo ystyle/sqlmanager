@@ -79,16 +79,18 @@ store.RegisterWithDescs("GetStudentByID", "Query Student by ID", GetStudentByID)
 sm := sqlmanager.New()
 sm.Use(store)
 sm.load()
+sql, _ := sm.RenderTPL("GetStudentByID", 1)
 ```
 - Embed markdown Driver: using go embed.
 ```go
 //go:embed test-sql
 var Assets embed.FS
 func main() {
-	sm = sqlmanager.New()
+    sm = sqlmanager.New()
     sm.Use(sqlmanager.NewMarkdownDriverWithEmbedDir(Assets, "test-sql"))
     // sm.Use(sqlmanager.NewMarkdownDriverWithEmbed(Assets)) // default dir is sql
     sm.load()
+    sql, _ := sm.RenderTPL("test/GetStudentByID", 1)
 }
 ```
 > when the sql in `test-sql/admin/report.md/###GetStudentByRoot` the sql id is: `admin/report/GetStudentByRoot`
