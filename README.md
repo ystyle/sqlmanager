@@ -44,7 +44,7 @@ func main() {
     //     },
     // })
     sm.Load()
-    sql, err := sm.RenderTPL("GetStudentByID2", 1)
+    sql, err := sm.RenderTPL("GetStudentByID", 1)
     if err != nil {
         panic(err)
     }
@@ -67,6 +67,32 @@ func main() {
 }
 ```
 
+### Available plugins
+- File Driver: using file, See above.
+- Dynamic Driver： using variable.
+```go
+store := sqlmanager.NewDynamicDriver()
+
+const GetStudentByID = "select * from student where id = {{.}}"
+store.RegisterWithDescs("GetStudentByID", "Query Student by ID", GetStudentByID)
+
+sm := sqlmanager.New()
+sm.Use(store)
+sm.load()
+```
+- Embed markdown Driver: using go embed.
+```go
+//go:embed test-sql
+var Assets embed.FS
+func main() {
+	sm = sqlmanager.New()
+    sm.Use(sqlmanager.NewMarkdownDriverWithEmbedDir(Assets. "test-sql"))
+    // sm.Use(sqlmanager.NewMarkdownDriverWithEmbed(Assets))
+    sm.load()
+}
+```
+
+
 ### custom puglin
 > implement sqlmanager.Driver
 ```go
@@ -81,8 +107,8 @@ func (mdd *CustomeDriver ) DriverName() string {
     return "CustomeDriver"
 }
 
-func (mdd *CustomeDriver ) Load() ([]SqlTemple, error) {
-    var list []SqlTemple
+func (mdd *CustomeDriver ) Load() ([]sqlmanager.SqlTemple, error) {
+    var list []sqlmanager.SqlTemple
     // db.table("sql_store").Find(&list)
     return list, nil
 }
