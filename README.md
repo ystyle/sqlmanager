@@ -87,7 +87,7 @@ var Assets embed.FS
 func main() {
 	sm = sqlmanager.New()
     sm.Use(sqlmanager.NewMarkdownDriverWithEmbedDir(Assets. "test-sql"))
-    // sm.Use(sqlmanager.NewMarkdownDriverWithEmbed(Assets))
+    // sm.Use(sqlmanager.NewMarkdownDriverWithEmbed(Assets)) // default dir is sql
     sm.load()
 }
 ```
