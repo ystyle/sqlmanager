@@ -91,7 +91,7 @@ func main() {
     sm.load()
 }
 ```
-> when the sql in `test-sql/admin/report.md/###GetStudentByRoot` the sql id is: `admin.report.GetStudentByRoot`
+> when the sql in `test-sql/admin/report.md/###GetStudentByRoot` the sql id is: `admin/report/GetStudentByRoot`
 
 
 ### custom puglin
