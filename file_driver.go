@@ -1,12 +1,11 @@
 package sqlmanager
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"github.com/gomarkdown/markdown"
-	"github.com/gomarkdown/markdown/ast"
 	"github.com/gomarkdown/markdown/parser"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -63,14 +62,16 @@ func (mdd *MarkdownDriver) Load() ([]SqlTemple, error) {
 
 func parseMarkdown(filename string) ([]SqlTemple, error) {
 	var sqls []SqlTemple
-	buf, err := ioutil.ReadFile(filename)
+	buf, err := os.ReadFile(filename)
 	if err != nil {
 		log.Printf("sqlmanager - ERROR: %s loading failed...\n", filename)
 		return nil, err
 	}
-
+	if bytes.ContainsRune(buf, '\r') {
+		buf = bytes.ReplaceAll(buf, []byte{'\r'}, nil)
+	}
 	psr := parser.New()
-	node := markdown.Parse(buf, psr)
+	node := markdown.Parse(bytes.ReplaceAll(buf, []byte("\r"), nil), psr)
 	list := getAll(node)
 	i := 0
 	for {
@@ -96,24 +97,4 @@ func parseMarkdown(filename string) ([]SqlTemple, error) {
 		}
 	}
 	return sqls, nil
-}
-
-func getAll(node ast.Node) []item {
-	var list []item
-	ast.WalkFunc(node, func(node ast.Node, entering bool) ast.WalkStatus {
-		switch v := node.(type) {
-		case *ast.Text:
-			list = append(list, item{
-				Type:    "text",
-				Content: string(v.Literal),
-			})
-		case *ast.CodeBlock:
-			list = append(list, item{
-				Type:    "code",
-				Content: string(v.Literal),
-			})
-		}
-		return 0
-	})
-	return list
 }

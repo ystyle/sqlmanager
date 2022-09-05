@@ -1,6 +1,7 @@
 package sqlmanager
 
 import (
+	"bytes"
 	"embed"
 	"errors"
 	"fmt"
@@ -33,7 +34,7 @@ func (mdd *EmbedMarkdownDriver) DriverName() string {
 
 func (mdd *EmbedMarkdownDriver) Load() ([]SqlTemple, error) {
 	var sqls []SqlTemple
-	err := fs.WalkDir(mdd.fs, "sql", func(subpath string, d fs.DirEntry, err error) error {
+	err := fs.WalkDir(mdd.fs, mdd.dir, func(subpath string, d fs.DirEntry, err error) error {
 		if d.IsDir() {
 			return nil
 		}
@@ -62,7 +63,9 @@ func (mdd *EmbedMarkdownDriver) parseMarkdown(filename string) ([]SqlTemple, err
 		log.Printf("sqlmanager - ERROR: %s loading failed...\n", filename)
 		return nil, err
 	}
-
+	if bytes.ContainsRune(buf, '\r') {
+		buf = bytes.ReplaceAll(buf, []byte{'\r'}, nil)
+	}
 	psr := parser.New()
 	node := markdown.Parse(buf, psr)
 	list := getAll(node)
