@@ -68,7 +68,7 @@ func parseMarkdown(filename string) ([]SqlTemple, error) {
 		return nil, err
 	}
 	if bytes.ContainsRune(buf, '\r') {
-		buf = bytes.ReplaceAll(buf, []byte{'\r'}, nil)
+		buf = NormalizeNewlines(buf)
 	}
 	psr := parser.New()
 	node := markdown.Parse(bytes.ReplaceAll(buf, []byte("\r"), nil), psr)
