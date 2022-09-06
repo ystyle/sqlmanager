@@ -64,7 +64,7 @@ func (mdd *EmbedMarkdownDriver) parseMarkdown(filename string) ([]SqlTemple, err
 		return nil, err
 	}
 	if bytes.ContainsRune(buf, '\r') {
-		buf = NormalizeNewlines(buf)
+		buf = markdown.NormalizeNewlines(buf)
 	}
 	psr := parser.New()
 	node := markdown.Parse(buf, psr)
