@@ -1,6 +1,6 @@
-木兰宽松许可证, 第2版
+                     木兰宽松许可证, 第2版
 
-   木兰宽松许可证， 第2版
+   木兰宽松许可证， 第2版 
    2020年1月 http://license.coscl.org.cn/MulanPSL2
 
 
@@ -36,15 +36,15 @@
 
    5. 免责声明与责任限制
 
-      “软件”及其中的“贡献”在提供时不带任何明示或默示的担保。在任何情况下，“贡献者”或版权所有者不对任何人因使用“软件”或其中的“贡献”而引发的任何直接或间接损失承担责任，不论因何种原因导致或者基于何种法律理论，即使其曾被建议有此种损失的可能性。
+      “软件”及其中的“贡献”在提供时不带任何明示或默示的担保。在任何情况下，“贡献者”或版权所有者不对任何人因使用“软件”或其中的“贡献”而引发的任何直接或间接损失承担责任，不论因何种原因导致或者基于何种法律理论，即使其曾被建议有此种损失的可能性。 
 
    6. 语言
       “本许可证”以中英文双语表述，中英文版本具有同等法律效力。如果中英文版本存在任何冲突不一致，以中文版为准。
 
-   条款结束
+   条款结束 
 
    如何将木兰宽松许可证，第2版，应用到您的软件
-
+   
    如果您希望将木兰宽松许可证，第2版，应用到您的新软件，为了方便接收者查阅，建议您完成如下三步：
 
       1， 请您补充如下声明中的空白，包括软件名、软件的首次发表年份以及您作为版权人的名字；
@@ -53,8 +53,8 @@
 
       3， 请将如下声明文本放入每个源文件的头部注释中。
 
-   Copyright (c) [2021] [YSTYLE]
-   [sqlmanager] is licensed under Mulan PSL v2.
+   Copyright (c) [Year] [name of copyright holder]
+   [Software Name] is licensed under Mulan PSL v2.
    You can use this software according to the terms and conditions of the Mulan PSL v2.
    You may obtain a copy of Mulan PSL v2 at:
             http://license.coscl.org.cn/MulanPSL2
@@ -118,10 +118,10 @@
       iii Attach the statement to the appropriate annotated syntax at the beginning of each source file.
 
 
-   Copyright (c) [2021] [YSTYLE]
-   [sqlmanager] is licensed under Mulan PSL v2.
+   Copyright (c) [Year] [name of copyright holder]
+   [Software Name] is licensed under Mulan PSL v2.
    You can use this software according to the terms and conditions of the Mulan PSL v2.
    You may obtain a copy of Mulan PSL v2 at:
-               http://license.coscl.org.cn/MulanPSL2
-   THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-   See the Mulan PSL v2 for more details.
+               http://license.coscl.org.cn/MulanPSL2 
+   THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.  
+   See the Mulan PSL v2 for more details.  
