@@ -31,7 +31,9 @@ func (sm *SqlManager) Use(plugin Driver) {
 }
 
 func (sm *SqlManager) Load() {
-	sm.tpl = nil
+	sm.tpl = template.New("_root_")
+	sm.tpl.Funcs(sm.funcs)
+	var sqltpls []SqlTemple
 	for _, driver := range sm.drivers {
 		sqls, err := driver.Load()
 		if err != nil {
@@ -41,15 +43,10 @@ func (sm *SqlManager) Load() {
 		for _, sql := range sqls {
 			d, has := sm.findTpl(sql.Name)
 			if has {
-				log.Printf("sqlmanager - WARN: %s Has duplicate sql: It will be cover [%s] with [ %s ]\n", sql.Name, strings.ReplaceAll(d.Sql, "\n", ""), strings.ReplaceAll(sql.Sql, "\n", ""))
+				log.Printf("sqlmanager - WARN: %s Has duplicate sql: It will be cover [%s-%s] with [ %s ]\n", driver.DriverName(), sql.Name, strings.ReplaceAll(d.Sql, "\n", ""), strings.ReplaceAll(sql.Sql, "\n", ""))
 			}
-			sm.sqlTemples = append(sm.sqlTemples, sql)
-			if sm.tpl == nil {
-				sm.tpl = template.New(sql.Name)
-				sm.tpl.Funcs(sm.funcs)
-			} else {
-				sm.tpl = sm.tpl.New(sql.Name)
-			}
+			sqltpls = append(sqltpls, sql)
+			sm.tpl = sm.tpl.New(sql.Name)
 			sm.tpl, err = sm.tpl.Parse(sql.Sql)
 			if err != nil {
 				panic(err)
@@ -57,6 +54,7 @@ func (sm *SqlManager) Load() {
 		}
 		log.Printf("sqlmanager - INFO: %s loaded %d sqls.\n", driver.DriverName(), len(sqls))
 	}
+	sm.sqlTemples = sqltpls
 }
 
 func (sm *SqlManager) findTpl(name string) (*SqlTemple, bool) {

@@ -1,12 +1,7 @@
 package sqlmanager
 
 import (
-	"bytes"
 	"embed"
-	"errors"
-	"fmt"
-	"github.com/gomarkdown/markdown"
-	"github.com/gomarkdown/markdown/parser"
 	"io/fs"
 	"log"
 	"path"
@@ -57,48 +52,18 @@ func (mdd *EmbedMarkdownDriver) Load() ([]SqlTemple, error) {
 }
 
 func (mdd *EmbedMarkdownDriver) parseMarkdown(filename string) ([]SqlTemple, error) {
-	var sqls []SqlTemple
 	buf, err := mdd.fs.ReadFile(filename)
 	if err != nil {
 		log.Printf("sqlmanager - ERROR: %s loading failed...\n", filename)
 		return nil, err
 	}
-	if bytes.ContainsRune(buf, '\r') {
-		buf = markdown.NormalizeNewlines(buf)
-	}
-	psr := parser.New()
-	node := markdown.Parse(buf, psr)
-	list := getAll(node)
-	i := 0
-	for {
-		// 1. text, code
-		// 2. text, text, code
-		if i >= len(list) {
-			break
-		}
-		var tpl SqlTemple
-		if list[i].Type == "text" && list[i+1].Type == "code" {
-			tpl.Name = mdd.getName(filename, list[i].Content)
-			tpl.Sql = list[i+1].Content
-			sqls = append(sqls, tpl)
-			i += 2
-		} else if list[i].Type == "text" && list[i+1].Type == "text" && list[i+2].Type == "code" {
-			tpl.Name = mdd.getName(filename, list[i].Content)
-			tpl.Description = list[i+1].Content
-			tpl.Sql = list[i+2].Content
-			sqls = append(sqls, tpl)
-			i += 3
-		} else {
-			return nil, errors.New(fmt.Sprintf("ERROR: parse markdown failed: %s", filename))
-		}
-	}
-	return sqls, nil
+	return parseMarkdown(buf, mdd.getName(filename))
 }
 
-func (mdd *EmbedMarkdownDriver) getName(filename, code string) string {
+func (mdd *EmbedMarkdownDriver) getName(filename string) string {
 	ext := path.Ext(filename)
 	base := strings.TrimSuffix(filename, ext)
 	base = strings.TrimPrefix(base, mdd.dir)
 	base = strings.TrimPrefix(base, "/")
-	return path.Join(strings.TrimSuffix(base, ext), code)
+	return base
 }

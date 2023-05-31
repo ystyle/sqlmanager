@@ -46,7 +46,14 @@ a library for manager sql with markdown or constant. and you can custom sql stor
        //     },
        // })
        sm.Load()
-       sql, err := sm.RenderTPL("GetStudentByID", 1)
+       sql, err := sm.RenderTPL("test/GetStudentByID", 1)
+       if err != nil {
+           panic(err)
+       }
+       fmt.Println(sql)
+       // select * from student where id = 1
+   
+       sql, err = sm.RenderTPL("test2/GetStudentByID2", 1)
        if err != nil {
            panic(err)
        }
@@ -94,6 +101,39 @@ a library for manager sql with markdown or constant. and you can custom sql stor
     sm.load()
     sql, _ := sm.RenderTPL("GetStudentByID", 1)
     ```
+4. Database Driver: store in database
+   >you can custom the table name, and delete row should set deleted = 1, deleted_at = now(). you can build a interface to manage your sqls in your product.  
+   >field: name, deleted,deleted_at,description,sql is required.  
+   >load sql only on call `sm.load()`, it mean you should run `sm.load()` after changes
+   ```sql
+    create table sql_manager
+    (
+    id            int unsigned auto_increment primary key,
+    name        varchar(255)  null,
+    deleted     int default 0 not null,
+    deleted_at  datetime      null,
+    description varchar(255)  null,
+    `sql`       text          null,
+    constraint sql_manager_deleted_name_uindex
+    unique (deleted, name)
+    );
+    INSERT INTO sql_manager (name, deleted, deleted_at, description, `sql`) VALUES ('GetStudentByID', 0, null, 'get student by id, required id', 'select * from student where id = {{.}}');
+    ```
+    ```go
+    import (
+       "database/sql"
+        _ "github.com/go-sql-driver/mysql"
+    )
+    
+    func main() {
+        db, _ := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/test1")
+        sm = sqlmanager.New()
+        sm.Use(sqlmanager.NewDatabaseDriver(db, "sql_manager"))
+        sm.load()
+        sql, _ := sm.RenderTPL("test/GetStudentByID", 1)
+    }
+    ```
+   
 
 ### custom puglin
 > implement sqlmanager.Driver
