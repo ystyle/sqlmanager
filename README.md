@@ -103,7 +103,7 @@ a library for manager sql with markdown or constant. and you can custom sql stor
     ```
 4. Database Driver: store in database
    >you can custom the table name, and delete row should set deleted = 1, deleted_at = now(). you can build a interface to manage your sqls in your product.  
-   >field: name, deleted,deleted_at,description,sql is required.  
+   >Field names: name, deleted, deleted_at, description, sql are required in this table.
    >load sql only on call `sm.load()`, it mean you should run `sm.load()` after changes
    ```sql
     create table sql_manager
