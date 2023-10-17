@@ -1,7 +1,6 @@
 package sqlmanager
 
 import (
-	"bytes"
 	"errors"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/ast"
@@ -11,9 +10,7 @@ import (
 
 func parseMarkdown(buf []byte, prefix string) ([]SqlTemple, error) {
 	var sqls []SqlTemple
-	if bytes.ContainsRune(buf, '\r') {
-		buf = markdown.NormalizeNewlines(buf)
-	}
+	buf = markdown.NormalizeNewlines(buf)
 	psr := parser.New()
 	node := markdown.Parse(buf, psr)
 	list := getAll(node)
