@@ -3,10 +3,12 @@ package sqlmanager
 import (
 	"bytes"
 	"errors"
+	"path/filepath"
+	"strings"
+
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/ast"
 	"github.com/gomarkdown/markdown/parser"
-	"path/filepath"
 )
 
 func parseMarkdown(buf []byte, prefix string) ([]SqlTemple, error) {
@@ -24,14 +26,16 @@ func parseMarkdown(buf []byte, prefix string) ([]SqlTemple, error) {
 		if i >= len(list) {
 			break
 		}
+		name := filepath.Join(prefix, list[i].Content)
+		name = strings.ReplaceAll(name, "\\", "/")
 		var tpl SqlTemple
 		if list[i].Type == "text" && list[i+1].Type == "code" {
-			tpl.Name = filepath.Join(prefix, list[i].Content)
+			tpl.Name = name
 			tpl.Sql = list[i+1].Content
 			sqls = append(sqls, tpl)
 			i += 2
 		} else if list[i].Type == "text" && list[i+1].Type == "text" && list[i+2].Type == "code" {
-			tpl.Name = filepath.Join(prefix, list[i].Content)
+			tpl.Name = name
 			tpl.Description = list[i+1].Content
 			tpl.Sql = list[i+2].Content
 			sqls = append(sqls, tpl)
