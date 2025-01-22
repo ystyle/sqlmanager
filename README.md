@@ -9,10 +9,17 @@ a library for manager sql with markdown or constant. and you can custom sql stor
 
 ### feature
 - manage sql with markdown
-- render sql with go template
+- render sql with [sqltemplate](https://github.com/ystyle/sqltemplate)(fork from go template)
+- generates sql statements with ? placeholders, and arguments list   
 - support load sql with custom plugin
 
 ### usage
+
+#### install
+
+```bash
+go get github.com/ystyle/sqlmanager/v2
+```
 
 #### create a markdown in
 > markdown content in sql/test.md
@@ -32,6 +39,7 @@ a library for manager sql with markdown or constant. and you can custom sql stor
    import (
        "fmt"
        "github.com/ystyle/sqlmanager"
+	     "github.com/ystyle/sqltemplate"
    )
 
    func main() {
@@ -40,39 +48,36 @@ a library for manager sql with markdown or constant. and you can custom sql stor
        // load sql with custom dir
        // sm.Use(sqlmanager.NewMarkdownDriverWithDir("./prod-sql"))
        // register go template func
-       // sm.RegisterFunc(template.FuncMap{
-       //     "test": func(v string) string {
+       // sm.RegisterFunc(sqltemplate.FuncMap{
+       //     "upper": func(v string) string {
        //         return strings.ToUpper(v)
        //     },
        // })
        sm.Load()
-       sql, err := sm.RenderTPL("test/GetStudentByID", 1)
+       sql, args, err := sm.RenderTPL("test/GetStudentByID", 1)
        if err != nil {
            panic(err)
        }
        fmt.Println(sql)
-       // select * from student where id = 1
+       fmt.Println(args)
+       // select * from student where id = ?
+       // [1]
    
-       sql, err = sm.RenderTPL("test2/GetStudentByID2", 1)
-       if err != nil {
-           panic(err)
-       }
-       fmt.Println(sql)
-       // select * from student where id = 1
-
        // using gorm 
        // db, err := gorm.Open("databaseurl")
        // if err != nil {
        //   panic("failed to connect database")
        // }
-       // db.Raw(sql)
+       // db.Raw(sql, args...)
+       // db log: select * from student where id = 1
 
        // using database/sql
        // db, err := sql.Open("driver-name", "database=test1")
        // if err != nil {
        //   log.Fatal(err)
        // }
-       // db.Query(sql)
+       // db.Query(sql, args...)
+       // db log: select * from student where id = 1 
    }
    ```
 2. Embed markdown Driver: using go embed.
@@ -84,7 +89,7 @@ a library for manager sql with markdown or constant. and you can custom sql stor
        sm.Use(sqlmanager.NewMarkdownDriverWithEmbedDir(Assets, "test-sql"))
        // sm.Use(sqlmanager.NewMarkdownDriverWithEmbed(Assets)) // default dir is sql
        sm.load()
-       sql, _ := sm.RenderTPL("test/GetStudentByID", 1)
+       sql,args, _ := sm.RenderTPL("test/GetStudentByID", 1)
    }
    ```
    >when the sql in `test-sql/admin/report.md/###GetStudentByRoot` the sql id is: `admin/report/GetStudentByRoot`
@@ -99,7 +104,7 @@ a library for manager sql with markdown or constant. and you can custom sql stor
     sm := sqlmanager.New()
     sm.Use(store)
     sm.load()
-    sql, _ := sm.RenderTPL("GetStudentByID", 1)
+    sql, args, _ := sm.RenderTPL("GetStudentByID", 1)
     ```
 4. Database Driver: store in database
    >you can custom the table name, and delete row should set deleted = 1, deleted_at = now(). you can build a interface to manage your sqls in your product.  
@@ -126,11 +131,11 @@ a library for manager sql with markdown or constant. and you can custom sql stor
     )
     
     func main() {
-        db, _ := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/test1")
+        db, _ := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/test")
         sm = sqlmanager.New()
         sm.Use(sqlmanager.NewDatabaseDriver(db, "sql_manager"))
         sm.load()
-        sql, _ := sm.RenderTPL("test/GetStudentByID", 1)
+        sql, args, _ := sm.RenderTPL("GetStudentByID", 1)
     }
     ```
    

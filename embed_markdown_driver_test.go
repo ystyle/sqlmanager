@@ -14,6 +14,7 @@ func TestEmbedMarkdownDriver(t *testing.T) {
 	sm.Use(NewMarkdownDriverWithEmbedDir(Assets, "test-sql"))
 	// sm.Use(sqlmanager.NewMarkdownDriverWithEmbed(Assets)) // default dir is sql
 	sm.Load()
-	sql, _ := sm.RenderTPL("test/GetStudentByID2", 1)
+	sql, args, _ := sm.RenderTPL("test/GetStudentByID2", 1)
 	fmt.Println(sql)
+	fmt.Println(args)
 }

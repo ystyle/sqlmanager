@@ -5,20 +5,21 @@ import (
 	"reflect"
 	"runtime"
 	"strings"
-	"text/template"
+
+	"github.com/ystyle/sqltemplate"
 )
 
 type SqlManager struct {
 	sqlTemples []SqlTemple
 	drivers    map[string]Driver
-	funcs      template.FuncMap
-	tpl        *template.Template
+	funcs      sqltemplate.FuncMap
+	tpl        *sqltemplate.Template
 }
 
 func New() *SqlManager {
 	sm := &SqlManager{
 		drivers: make(map[string]Driver),
-		funcs:   template.FuncMap{},
+		funcs:   sqltemplate.FuncMap{},
 	}
 	return sm
 }
@@ -31,7 +32,7 @@ func (sm *SqlManager) Use(plugin Driver) {
 }
 
 func (sm *SqlManager) Load() {
-	sm.tpl = template.New("_root_")
+	sm.tpl = sqltemplate.New("_root_")
 	sm.tpl.Funcs(sm.funcs)
 	var sqltpls []SqlTemple
 	for _, driver := range sm.drivers {
@@ -66,7 +67,7 @@ func (sm *SqlManager) findTpl(name string) (*SqlTemple, bool) {
 	return nil, false
 }
 
-func (sm *SqlManager) RegisterFunc(funcs template.FuncMap) {
+func (sm *SqlManager) RegisterFunc(funcs sqltemplate.FuncMap) {
 	for k, v := range funcs {
 		if temp, ok := sm.funcs[k]; ok {
 			log.Printf("sqlmanager - WARN: %s Has duplicate func: It will be cover [%s] with [%s]\n", k, getFunctionName(temp), getFunctionName(v))

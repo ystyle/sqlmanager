@@ -1,2 +1,4 @@
 github.com/gomarkdown/markdown v0.0.0-20220830015526-01a3c37d6f50 h1:tSuUky4sFWjiIIEOefDDBjx5BUIT3kZwcXHM2CNDdTk=
 github.com/gomarkdown/markdown v0.0.0-20220830015526-01a3c37d6f50/go.mod h1:JDGcbDT52eL4fju3sZ4TeHGsQwhG9nbDV21aMyhwPoA=
+github.com/ystyle/sqltemplate v0.0.0-20241217071708-120fe6563d2a h1:xUV26w891xFaVh+NHtUqilUmJ4+/7SrCWtBfXSlIZCQ=
+github.com/ystyle/sqltemplate v0.0.0-20241217071708-120fe6563d2a/go.mod h1:ycjAtNWI21yc3hjBMU71CUyVrzGk5/3upq3+3QT+Rp0=
